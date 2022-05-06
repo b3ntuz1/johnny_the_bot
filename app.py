@@ -13,7 +13,7 @@ top_ten = []
 
 
 @dp.message_handler()
-async def get_msg(msg: types.Message):
+async def main types.Message):
     ''' потрібно щоб менше тривожити бд '''
     if msg.from_user.id not in top_ten:
         top_ten.insert(0, chat_member.get_user(msg.from_user))
@@ -31,23 +31,21 @@ async def send_welcome(msg: types.Message):
 
 @dp.message_handler(commands=wtf.wtf_varians)
 async def wtf_cmd(msg: types.Message):
-    if is_not_admin(msg):
+    user_id =  msg.from_user.id
+    if chat_member.is_admin(msg.chat, user_id):
         await msg.answer("I can not mute administrators")
         return 0
 
-    user_id =  msg.from_user.id
     time_in_secs = wtf.wtf_main()
-    await msg.chat.restrict(user_id, until_date=time_in_secs[0])
+    # old version
+    # await msg.chat.restrict(user_id, until_date=time_in_secs[0])
+    #
+    # new version
+    chat_member.mute(msg.chat, user_id, time_in_secs[0])
+
     await msg.answer(
         f'__{msg.from_user.first_name}__  muted for {time_in_secs[1]}'
         )
-
-
-def is_not_admin(msg):
-    for admin in msg.chat.get_administrators():
-        if admin.user.id == msg.from_user.id:
-            return True
-    return False
 
 
 if __name__ == '__main__':

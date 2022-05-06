@@ -6,13 +6,13 @@
 from models import Person
 
 
-def mute(chat_id, user_id, until_date):
+def mute(chat, user_id, until_date):
     ''' Мютить юзера
     chat_id: ідентифікатор чату
     user_id: юнікальний ідентифікатор користувача
     until_date: до цієї дати (юнікстайм) юзер буде мовчати
     '''
-    pass
+    chat.restrict(user_id, until_date=until_date)
 
 
 def unmute():
@@ -44,4 +44,11 @@ def get_user(data):
     except:
         add_user(data)
     return data.id
+
+
+def is_admin(chat, user_id):
+    for admin in chat.get_administrators():
+        if admin.user.id == user_id:
+            return True
+    return False
 
